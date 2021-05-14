@@ -92,7 +92,7 @@ function BIO_to_string(b : PBIO; Encoding: TEncoding): string; overload;
 function BIO_to_string(b : PBIO): string; overload;
 
 function LoadOpenSSLLibraryEx :Boolean;
-procedure UnLoadOpenSSLLibraryEx;
+function UnLoadOpenSSLLibraryEx: Boolean;
 
 procedure OPENSSL_free(address: pointer);
 
@@ -211,12 +211,14 @@ begin
   end;
 end;
 
-procedure UnLoadOpenSSLLibraryEx;
+function UnLoadOpenSSLLibraryEx: Boolean;
 begin
+  Result := True;
   if hSSL <> 0 then
   begin
-    FreeLibrary(hSSL);
-    ResetFuncPointers;
+    Result := FreeLibrary(hSSL);
+    if Result then
+      ResetFuncPointers;
   end;
 end;
 
